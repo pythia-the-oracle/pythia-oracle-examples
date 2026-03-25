@@ -23,7 +23,7 @@ Every other oracle provides raw prices. Pythia provides **calculated indicators*
 | Volatility | 30-day realized volatility | `bal_VOLATILITY_30D` |
 | Liquidity Score | On-chain liquidity quality | `comp_LIQUIDITY_SCORE` |
 
-**13 tokens** · **156 indicator instances** · **4 timeframes** (5M / 1H / 1D / 1W)
+**22 tokens** · **484 indicator instances** · **4 timeframes** (5M / 1H / 1D / 1W)
 **Standard Chainlink interface** — works with any contract that uses `requestFeed` / `fulfill`
 
 ---
@@ -193,15 +193,20 @@ npx hardhat run scripts/deploy.js --network polygon
 
 ---
 
-## MCP Server (for AI Agents)
+## AI Agent Integration
 
-If you're building an AI agent or using Claude/any MCP-compatible client:
+If you're building an AI agent, trading bot, or using Claude/Cursor/any MCP-compatible client:
 
 ```bash
-pip install pythia-oracle-mcp
+pip install pythia-oracle-mcp    # MCP server (Claude, Cursor, OpenAI, Windsurf)
+pip install langchain-pythia     # LangChain tools (any LangChain/LangGraph agent)
 ```
 
-Your agent can then query live on-chain indicators without writing Solidity.
+Your AI agent can query live on-chain indicators, check oracle health, get contract addresses, and generate integration code — without writing Solidity.
+
+- [MCP Server on PyPI](https://pypi.org/project/pythia-oracle-mcp/)
+- [LangChain Integration on PyPI](https://pypi.org/project/langchain-pythia/)
+- [Official MCP Registry](https://registry.modelcontextprotocol.io)
 
 ---
 
