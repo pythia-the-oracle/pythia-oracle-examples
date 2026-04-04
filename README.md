@@ -49,7 +49,7 @@ uint256 rsi = faucet.lastValue(); // e.g. 65400000000000000000 = RSI 65.4
 ```solidity
 Chainlink.Request memory req = _buildChainlinkRequest(JOB_ID, address(this), this.fulfill.selector);
 req._add("feed", "pol_EMA_5M_20");
-_sendChainlinkRequest(req, 0.01 ether); // 0.01 LINK
+_sendChainlinkRequest(req, fee); // fee set in constructor — check pythia.c3x-solutions.com
 // oracle calls fulfill(requestId, value) ~30 seconds later
 ```
 
@@ -110,12 +110,15 @@ Faucet:      0x640fC3B9B607E324D7A3d89Fcb62C77Cc0Bd420A  (free, 5 req/day)
 > ⚠️ **LINK token warning:** Polygon has two LINK tokens. Always use the ERC-677 version (`0xb089...`). If you have bridged ERC-20 LINK (`0x53e0...`), convert it at [pegswap.chain.link](https://pegswap.chain.link/) first.
 
 ### Deployed Consumer Contracts (Mainnet — use directly)
-| Tier | Fee | Address |
-|------|-----|---------|
-| Discovery (any single indicator) | 0.01 LINK | `0xeC2865d66ae6Af47926B02edd942A756b394F820` |
-| Analysis (1H/1D/1W bundle) | 0.03 LINK | `0x3b3aC62d73E537E3EF84D97aB5B84B51aF8dB316` |
-| Speed (5M bundle) | 0.05 LINK | `0xC406e7d9AC385e7AB43cBD56C74ad487f085d47B` |
-| Complete (all indicators) | 0.10 LINK | `0x2dEC98fd7173802b351d1E28d0Cd5DdD20C24252` |
+
+> **Current pricing:** Check [pythia.c3x-solutions.com](https://pythia.c3x-solutions.com) or use the [MCP server](https://pypi.org/project/pythia-oracle-mcp/) `get_pricing` tool for live rates.
+
+| Tier | Address |
+|------|---------|
+| Discovery (any single indicator) | `0xeC2865d66ae6Af47926B02edd942A756b394F820` |
+| Analysis (1H/1D/1W bundle) | `0x3b3aC62d73E537E3EF84D97aB5B84B51aF8dB316` |
+| Speed (5M bundle) | `0xC406e7d9AC385e7AB43cBD56C74ad487f085d47B` |
+| Complete (all indicators) | `0x2dEC98fd7173802b351d1E28d0Cd5DdD20C24252` |
 
 ---
 
@@ -182,12 +185,14 @@ npx hardhat run scripts/deploy.js --network polygon
 
 ## Pricing Tiers
 
-| Tier | LINK/Request | What You Get |
-|------|-------------|-------------|
-| Discovery | 0.01 | Any single indicator (`uint256`) |
-| Analysis | 0.03 | All 1H/1D/1W indicators bundled (`uint256[]`) |
-| Speed | 0.05 | All 5M indicators bundled (`uint256[]`) |
-| Complete | 0.10 | Everything bundled — cheapest per-indicator |
+> **Live pricing:** [pythia.c3x-solutions.com](https://pythia.c3x-solutions.com) or MCP `get_pricing` tool. Fees may adjust with LINK price.
+
+| Tier | What You Get |
+|------|-------------|
+| Discovery | Any single indicator (`uint256`) |
+| Analysis | All 1H/1D/1W indicators bundled (`uint256[]`) |
+| Speed | All 5M indicators bundled (`uint256[]`) |
+| Complete | Everything bundled — cheapest per-indicator |
 
 **Break-even:** Discovery becomes more expensive than Analysis after 3+ calls per token. Use Analysis/Complete for multi-indicator strategies.
 

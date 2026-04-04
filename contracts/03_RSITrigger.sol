@@ -36,15 +36,16 @@ contract RSITrigger is ChainlinkClient, ConfirmedOwner {
     uint256 public oversoldThreshold   = 25e18;  // RSI < 25 → enable buying
 
     bytes32 private jobId;
-    uint256 private constant FEE = (1 * LINK_DIVISIBILITY) / 100; // 0.01 LINK
+    uint256 private fee;  // Check pythia.c3x-solutions.com for current rates
 
     event RSIUpdated(uint256 rsi, bool paused, bool buyEnabled);
     event ThresholdBreached(string condition, uint256 rsi);
 
-    constructor(address _link, address _oracle, bytes32 _jobId) ConfirmedOwner(msg.sender) {
+    constructor(address _link, address _oracle, bytes32 _jobId, uint256 _fee) ConfirmedOwner(msg.sender) {
         _setChainlinkToken(_link);
         _setChainlinkOracle(_oracle);
         jobId = _jobId;
+        fee = _fee;
     }
 
     /**

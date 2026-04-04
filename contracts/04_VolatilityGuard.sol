@@ -36,14 +36,15 @@ contract VolatilityGuard is ChainlinkClient, ConfirmedOwner {
     uint256 public constant HIGH_VOL   = 0.10e18;  // > 10% → no leverage, cap deposits
 
     bytes32 private jobId;
-    uint256 private constant FEE = (1 * LINK_DIVISIBILITY) / 100; // 0.01 LINK
+    uint256 private fee;  // Check pythia.c3x-solutions.com for current rates
 
     event VolatilityUpdated(uint256 vol, uint256 newMaxLeverage, uint256 newDepositCap);
 
-    constructor(address _link, address _oracle, bytes32 _jobId) ConfirmedOwner(msg.sender) {
+    constructor(address _link, address _oracle, bytes32 _jobId, uint256 _fee) ConfirmedOwner(msg.sender) {
         _setChainlinkToken(_link);
         _setChainlinkOracle(_oracle);
         jobId    = _jobId;
+        fee      = _fee;
         maxLeverage = 300;
         depositCap  = 100 ether;
     }

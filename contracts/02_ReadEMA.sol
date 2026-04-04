@@ -7,7 +7,7 @@ import "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
 /**
  * @title ReadEMA
  * @notice Read on-chain EMA (or any single indicator) from Pythia using your own LINK.
- *         Discovery tier: 0.01 LINK per request.
+ *         Discovery tier — check https://pythia.c3x-solutions.com for current pricing.
  *
  * DEPLOYMENT (Polygon mainnet):
  *   _link:   0xb0897686c545045aFc77CF20eC7A532E3120E0F1  (ERC-677 LINK — use PegSwap if needed)
@@ -36,15 +36,16 @@ contract ReadEMA is ChainlinkClient, ConfirmedOwner {
     string  public lastFeed;
 
     bytes32 private jobId;
-    uint256 private constant FEE = (1 * LINK_DIVISIBILITY) / 100; // 0.01 LINK
+    uint256 private fee;  // Set via constructor — check pythia.c3x-solutions.com for current rates
 
     event FeedRequested(bytes32 indexed requestId, string feed);
     event FeedFulfilled(bytes32 indexed requestId, uint256 value);
 
-    constructor(address _link, address _oracle, bytes32 _jobId) ConfirmedOwner(msg.sender) {
+    constructor(address _link, address _oracle, bytes32 _jobId, uint256 _fee) ConfirmedOwner(msg.sender) {
         _setChainlinkToken(_link);
         _setChainlinkOracle(_oracle);
         jobId = _jobId;
+        fee = _fee;
     }
 
     /**
