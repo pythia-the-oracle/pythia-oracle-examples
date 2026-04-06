@@ -6,13 +6,16 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy:testnet": "hardhat run scripts/deploy.js --network amoy",
-    "deploy:mainnet": "hardhat run scripts/deploy.js --network polygon"
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network polygon",
+    "deploy:events:testnet": "hardhat run scripts/deploy-events.js --network amoy",
+    "deploy:events:mainnet": "hardhat run scripts/deploy-events.js --network polygon"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
     "hardhat": "^2.22.0"
   },
   "dependencies": {
-    "@chainlink/contracts": "^1.2.0"
+    "@chainlink/contracts": "^1.2.0",
+    "dotenv": "^17.4.1"
   }
 }

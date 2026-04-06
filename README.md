@@ -82,6 +82,17 @@ if (rsi > OVERBOUGHT_THRESHOLD) {
 Adjust leverage limits and deposit caps based on live 30-day volatility.
 **Use case:** dHEDGE / Enzyme vault that reduces risk in high-vol regimes automatically.
 
+### 5. [`05_EventSubscriber.sol`](contracts/05_EventSubscriber.sol) — Events (indicator alerts)
+Subscribe to on-chain indicator alerts. One-shot subscriptions: fires once when condition is met, unused whole days refunded in LINK.
+**Use case:** get alerted when RSI drops below 30, when EMA crosses a level — no polling, no keeper.
+
+```solidity
+// Subscribe: "notify me when POL RSI drops below 30" for 7 days
+subscriber.subscribe("pol_RSI_5M_14", 7, 1, 3000000000);
+// condition 1 = BELOW, threshold = RSI 30 (8 decimal places)
+// Listen for PythiaEvent(eventId) on the registry contract
+```
+
 ---
 
 ## Network Configuration
@@ -119,6 +130,15 @@ Faucet:      0x640fC3B9B607E324D7A3d89Fcb62C77Cc0Bd420A  (free, 5 req/day)
 | Analysis (1H/1D/1W bundle) | `0x3b3aC62d73E537E3EF84D97aB5B84B51aF8dB316` |
 | Speed (5M bundle) | `0xC406e7d9AC385e7AB43cBD56C74ad487f085d47B` |
 | Complete (all indicators) | `0x2dEC98fd7173802b351d1E28d0Cd5DdD20C24252` |
+
+### Event Registry (indicator alerts)
+
+| Network | Address |
+|---------|---------|
+| Polygon Mainnet | `0x73686087d737833C5223948a027E13B608623e21` |
+| Polygon Amoy | `0x931Aa640d29E6C9D9fB3002749a52EC7fb277f9c` |
+
+Pricing: 1 LINK/day per subscription. Threshold: 8 decimal places (not 18 like regular feeds).
 
 ---
 
@@ -179,6 +199,12 @@ npx hardhat run scripts/deploy.js --network amoy
 ### Deploy to mainnet
 ```bash
 npx hardhat run scripts/deploy.js --network polygon
+```
+
+### Deploy Events subscriber
+```bash
+npx hardhat run scripts/deploy-events.js --network amoy     # testnet
+npx hardhat run scripts/deploy-events.js --network polygon   # mainnet
 ```
 
 ---

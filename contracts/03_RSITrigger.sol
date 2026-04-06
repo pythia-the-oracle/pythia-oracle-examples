@@ -59,7 +59,7 @@ contract RSITrigger is ChainlinkClient, ConfirmedOwner {
             jobId, address(this), this.fulfillRSI.selector
         );
         req._add("feed", feed);
-        _sendChainlinkRequest(req, FEE);
+        _sendChainlinkRequest(req, fee);
     }
 
     /**

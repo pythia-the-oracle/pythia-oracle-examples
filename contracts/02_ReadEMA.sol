@@ -62,7 +62,7 @@ contract ReadEMA is ChainlinkClient, ConfirmedOwner {
             jobId, address(this), this.fulfill.selector
         );
         req._add("feed", feed);
-        bytes32 requestId = _sendChainlinkRequest(req, FEE);
+        bytes32 requestId = _sendChainlinkRequest(req, fee);
         lastRequestId = requestId;
         lastFeed = feed;
         emit FeedRequested(requestId, feed);

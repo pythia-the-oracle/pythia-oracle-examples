@@ -59,7 +59,7 @@ contract VolatilityGuard is ChainlinkClient, ConfirmedOwner {
             jobId, address(this), this.fulfillVolatility.selector
         );
         req._add("feed", feed);
-        _sendChainlinkRequest(req, FEE);
+        _sendChainlinkRequest(req, fee);
     }
 
     /**
