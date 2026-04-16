@@ -1,14 +1,15 @@
 {
   "name": "pythia-oracle-examples",
   "version": "1.0.0",
-  "description": "Integration examples for Pythia — on-chain EMA, RSI, VWAP, Bollinger Bands via Chainlink",
+  "description": "Integration examples for Pythia — on-chain EMA, RSI, VWAP, Bollinger Bands, Events, and Visions via Chainlink",
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy:testnet": "hardhat run scripts/deploy.js --network amoy",
     "deploy:mainnet": "hardhat run scripts/deploy.js --network polygon",
     "deploy:events:testnet": "hardhat run scripts/deploy-events.js --network amoy",
-    "deploy:events:mainnet": "hardhat run scripts/deploy-events.js --network polygon"
+    "deploy:events:mainnet": "hardhat run scripts/deploy-events.js --network polygon",
+    "deploy:visions:mainnet": "hardhat run scripts/deploy-visions.js --network polygon"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",

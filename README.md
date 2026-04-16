@@ -1,7 +1,7 @@
 # Pythia Oracle — Integration Examples
 
-**On-chain EMA, RSI, VWAP, Bollinger Bands, and volatility via Chainlink.**
-The only oracle delivering pre-calculated technical indicators for smart contracts.
+**On-chain EMA, RSI, VWAP, Bollinger Bands, volatility, Events, and Visions via Chainlink.**
+The only oracle delivering pre-calculated technical indicators and AI market intelligence for smart contracts.
 
 → Website: [pythia.c3x-solutions.com](https://pythia.c3x-solutions.com)
 → Twitter: [@pythia_oracle](https://x.com/pythia_oracle)
@@ -25,6 +25,8 @@ Every other oracle provides raw prices. Pythia provides **calculated indicators*
 
 **22 tokens** · **484 indicator instances** · **4 timeframes** (5M / 1H / 1D / 1W)
 **Standard Chainlink interface** — works with any contract that uses `requestFeed` / `fulfill`
+
+Plus **Events** (on-chain indicator alerts) and **Visions** (AI market intelligence — backtested patterns delivered on-chain for free).
 
 ---
 
@@ -93,6 +95,35 @@ subscriber.subscribe("pol_RSI_5M_14", 7, 1, 3000000000);
 // Listen for PythiaEvent(eventId) on the registry contract
 ```
 
+### 6. [`06_VisionVaultGuard.sol`](contracts/06_VisionVaultGuard.sol) — Visions (AI market intelligence)
+Automated risk layer that reacts to Pythia Visions — AI-detected market patterns delivered on-chain.
+**Use case:** Pythia AI detects a BTC capitulation pattern (85-87% historically bullish), your vault automatically subscribes to confirmation Events and transitions through a state machine: `IDLE → WATCHING → CONFIRMED`.
+
+```solidity
+// 1. Subscribe to BTC Visions (free, one-time setup)
+guard.subscribeToVisions();
+
+// 2. When Pythia AI fires a Vision, relay bot calls processVision()
+//    → Contract auto-subscribes to confirmation Events (paid LINK)
+
+// 3. Query the state from your vault/strategy
+if (guard.isActionReady()) {
+    // A Vision has been confirmed by on-chain indicators
+    (,uint8 patternType, uint8 confidence, uint8 direction,,,) = guard.getStatus();
+    // e.g. patternType=0x11 (CAPITULATION_STRONG), confidence=87, direction=1 (BULLISH)
+}
+```
+
+**BTC Pattern Types:**
+| Code | Pattern | Historical Accuracy | Avg Move |
+|------|---------|-------------------|----------|
+| `0x11` | Capitulation Strong | 85-87% bullish | +7-8% |
+| `0x10` | Capitulation Bounce | 80% bullish | +5-7% |
+| `0x21` | EMA Divergence Strong | 89% bullish | +6% |
+| `0x20` | EMA Divergence Snap | 74-80% bullish | +4-5% |
+| `0x30` | Bollinger Extreme | 74% bullish | +3-4% |
+| `0x40` | Overbought Continuation | 60-65% bullish | 24-48h |
+
 ---
 
 ## Network Configuration
@@ -139,6 +170,14 @@ Faucet:      0x640fC3B9B607E324D7A3d89Fcb62C77Cc0Bd420A  (free, 5 req/day)
 | Polygon Amoy | `0x931Aa640d29E6C9D9fB3002749a52EC7fb277f9c` |
 
 Pricing: 1 LINK/day per subscription. Threshold: 8 decimal places (not 18 like regular feeds).
+
+### Vision Registry (AI market intelligence)
+
+| Network | Address |
+|---------|---------|
+| Polygon Mainnet | `0x39407eEc3BA80746BC6156eD924D16C2689533Ed` |
+
+Subscription is **free**. Visions are currently mainnet-only.
 
 ---
 
@@ -205,6 +244,11 @@ npx hardhat run scripts/deploy.js --network polygon
 ```bash
 npx hardhat run scripts/deploy-events.js --network amoy     # testnet
 npx hardhat run scripts/deploy-events.js --network polygon   # mainnet
+```
+
+### Deploy Visions vault guard (mainnet only)
+```bash
+npx hardhat run scripts/deploy-visions.js --network polygon
 ```
 
 ---
